@@ -1,28 +1,24 @@
 // -------------- THEME SWITCHER -------------- //
-@mixin theme($--bg-color, $--primary-text-color, $--secondary-text-color, $--link-color, $--visited-link-color, $--highlight) {
+@mixin theme($--bg-color, $--primary-text-color, $--secondary-text-color, $--link-color, $--highlight-color, $--selection-color) {
   background-color: $--bg-color;
 
   color: $--primary-text-color;
 
   a {
     color: $--link-color;
-    &:visited { color: $--visited-link-color; }
+    text-decoration: none;
+    font-weight:600;
+    &:hover {opacity: 0.5; }
   }
 
   details {
     border: thin solid $--primary-text-color;
+    padding: 1rem;
   }
 
   details summary {
     color: $--primary-text-color;
-  }
-
-  details[open] summary {
-    border-bottom: 1px solid $--primary-text-color;
-  }
-
-  pre {
-    background: $--bg-color;
+    text-decoration: none;
   }
 
   code:not(pre > code) {
@@ -31,14 +27,14 @@
   }
 
   *:target {
-    background: $--highlight;
+    // background: $--highlight-color;
     color: $--primary-text-color;
-   }
+  }
 
   table, th, td {
     border: thin solid $--primary-text-color;
-  }
 
+  }
   .toc {
     border: thin solid $--primary-text-color;
     padding: 1rem;
@@ -46,17 +42,17 @@
 
   figcaption { color: $--secondary-text-color; }
 
-  blockquote {
-    border: thin solid $--primary-text-color;
+  ::selection {
+    background: $--selection-color;
   }
 }
 
 @mixin dark-appearance {
-  @include theme(#000000, #ffffff, #000000, #79a8ff, #f78fe7, #2f3849); // modus-vivendi
+  @include theme(#505050, #ffffff, #ebebeb, #FFFF00, #FFFF00, #ffff0050);
 }
 
 @mixin light-appearance {
-  @include theme(#ffffff, #000000, #595959, #3548cf, #8f0075, #dae5ec); // modus-operandi
+  @include theme(#ffffff, #212121, #666666, #008dda, #ffd900, #66666650);
 }
 
 body[a="dark"] { @include dark-appearance; }
@@ -75,35 +71,51 @@ body[a="light"] { @include light-appearance; }
 html { height: 100%; }
 
 body {
-  font-family: monospace;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  // font-family: Arial;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.6;
   margin: 0;
   min-height: 100%;
   overflow-wrap: break-word;
 }
+// https://weixiang.github.io/posts/the-font-selection-and-development-guide-in-chinese-web-pages/
 
-h2, h3, h4, h5, h6 { margin-top: 1.5rem; }
+.post-meta { text-align: right; }
+
+h1 {font-size: 32px;}
+h2 {font-size: 28px;}
+h3 {font-size: 24px;}
+h4, h5, h6 {font-size: 20px;}
+
+h2, h3, h4, h5, h6 { margin-top: 0.5rem; }
+
+hr { margin: 2rem 0; }
 
 p { margin: 1rem 0; }
 
-li { margin: 0.4rem 0; }
+li { margin: 0.5rem 0rem 0.5rem 0rem; }
 
-a {
-  text-decoration: none;
-  &:hover { text-decoration: underline; }
+.w {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.toc {
+  padding: 1rem;
 }
 
 hr {
   text-align: center;
   border: 0;
-  margin: 2rem 0;
 
-  &:before { content: '/////' }
-  &:after { content: attr(data-content) '/////' }
+  &:before { content: '///////////////' }
+  &:after { content: attr(data-content) '///////////////' }
 }
 
 pre {
+  background: black;
   padding: 1em;
   overflow-x: auto; /* Fix pre content overflowing parent without scroll bar */
 }
@@ -111,15 +123,9 @@ pre {
 table { width: 100%; }
 
 table, th, td {
+  border: thin solid black;
   border-collapse: collapse;
   padding: 0.4rem;
-}
-
-code {
-  text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
 }
 
 code:not(pre > code) {
@@ -135,6 +141,8 @@ code.has-jax {
 }
 
 blockquote {
+  font-style: italic;
+  border: thin solid black;
   padding: 1rem;
 
   p { margin: 0; }
@@ -142,40 +150,45 @@ blockquote {
 
 img {
   max-width: 100%;
-  display: block;
+  display: inline-block;
   margin: 0 auto;
 }
 
 figcaption {
   text-align: center;
-  opacity: 0.5;
+  opacity: 0.7;
+  font-size: 14px !important; 
 }
 
-details {
-  padding: 1rem;
-}
 
-details summary {
-  text-decoration: none;
-}
 
-details[open] summary {
-  margin-bottom: 0.5em;
-  padding-bottom: 0.5em;
-}
+// Home layout
 
-.post-meta {
+/* 主容器样式 */
+.main-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 5px;
 }
 
-.w {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
+/* 左侧内容样式 */
+.left-content {
+  flex: 0 0 auto;
 }
 
-.toc {
-  padding: 1rem;
+/* 右侧内容样式 */
+.right-content {
+  flex: 1;
+}
+
+/* 媒体查询：小屏幕（手机）布局调整 */
+@media (max-width: 768px) {
+  .main-container {
+      display: block; /* 水平布局变为垂直布局 */
+  }
+
+  .left-content, 
+  .right-content {
+      margin-bottom: 20px; /* 添加下间距 */
+  }
 }
